@@ -1,2 +1,4 @@
 *.json
 *.pyc
+*.db
+node_modules/
