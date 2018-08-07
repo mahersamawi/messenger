@@ -3,14 +3,16 @@ import socket
 import datetime
 import urllib.request
 import logging
+import time
+from flask_socketio import SocketIO, send, join_room, leave_room
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import AES
 from Crypto.Hash import SHA256
 from Crypto import Random
 from flask import Flask, request, jsonify, make_response
 
-
 app = Flask(__name__)
+socketio = SocketIO(app)
 LOG_TO_FILE = False
 LEVEL = logging.INFO
 
@@ -93,6 +95,29 @@ def get_parameter(url_to_parse, parameter_to_get):
     return url_to_parse.values.get(parameter_to_get, None)
 
 
+@socketio.on("message")
+def message_handler(msg):
+    print("Message is: " + msg)
+    send(msg, broadcast=False)
+
+@socketio.on('join')
+def on_join(data):
+    print("In join")
+    username = request.sid
+    room = data
+    print(request.sid)
+    join_room(room)
+    send(username + ' has entered the room.', room=room)
+
+@socketio.on('leave')
+def on_leave(data):
+    username = request.sid
+    room = data
+    leave_room(room)
+    send(username + ' has left the room.', room=room)
+
+
+
 def get_ip():
     """
     Function that gets IP of local machine so server can be used on that IP instead of localhost
@@ -107,7 +132,8 @@ if __name__ == "__main__":
     #host_ip = str(get_ip())
     # Uses HTTP on ip
     host_ip = "127.0.0.1"
-    app.run(host=host_ip, threaded=True)
+    #app.run(host=host_ip, threaded=True)
+    socketio.run(app, host=host_ip)
     # Uses HTTPS
     # app.run(ssl_context='adhoc', host=host_ip)
     # Uses HTTP on localhost
