@@ -9,7 +9,10 @@
 $(document).ready(function() {
     var socket = io.connect('http://127.0.0.1:5000');
     socket.on('connect', function() {
-        socket.send('User has connected!');
+        var send_dict = {};
+        send_dict['msg'] = "User has connected!";
+        send_dict['room'] = "None";
+        socket.send(send_dict);
     });
     socket.on('message', function(msg) {
         $("#messages").append('<li>'+msg+'</li>');
@@ -21,7 +24,10 @@ $(document).ready(function() {
     });
 
     $('#sendbutton').on('click', function() {
-        socket.send($('#myMessage').val());
+        var send_dict = {};
+        send_dict['msg'] = $('#myMessage').val();
+        send_dict['room'] = "poop";
+        socket.send(send_dict);
         $('#myMessage').val('');
     });
 

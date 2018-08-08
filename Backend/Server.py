@@ -97,25 +97,36 @@ def get_parameter(url_to_parse, parameter_to_get):
 
 @socketio.on("message")
 def message_handler(msg):
-    print("Message is: " + msg)
-    send(msg, broadcast=False)
+    """
+    Message hangler that whenever a message is received it is sent to the proper room. 
+    :param msg: Dictonary containing the message contebts and intended roon
+    """
+    logging.info("Message Text: %s" %  msg['msg'])
+    send(msg['msg'], room=msg['room'])
+
 
 @socketio.on('join')
 def on_join(data):
-    print("In join")
+    """
+    Join handler, when a user wants to join a specific room
+    """
     username = request.sid
     room = data
-    print(request.sid)
     join_room(room)
+    logging.info(username + ' has entered the room.')
     send(username + ' has entered the room.', room=room)
+
 
 @socketio.on('leave')
 def on_leave(data):
+    """
+    Leave handler, when a user wants to leave a specific room
+    """
     username = request.sid
     room = data
     leave_room(room)
+    logging.info(username + ' has left the room.')
     send(username + ' has left the room.', room=room)
-
 
 
 def get_ip():
