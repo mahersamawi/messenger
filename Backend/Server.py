@@ -10,9 +10,14 @@ from Crypto.Cipher import AES
 from Crypto.Hash import SHA256
 from Crypto import Random
 from flask import Flask, request, jsonify, make_response
+from flask_sqlalchemy import SQLAlchemy
+
 
 app = Flask(__name__)
 socketio = SocketIO(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 LOG_TO_FILE = False
 LEVEL = logging.INFO
 
@@ -22,6 +27,24 @@ if LOG_TO_FILE:
                         format='%(levelname)s:%(message)s', level=LEVEL)
 else:
     logging.basicConfig(format='%(levelname)s:%(message)s', level=LEVEL)
+
+
+# TODO, move DB code to different files
+# TODO Design questions, DB Model and representation
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender = db.Column(db.String(80), unique=False, nullable=False)
+    intended_room = db.Column(db.String(120), unique=False, nullable=False)
+    message_text = db.Column(db.String(120), unique=False, nullable=False)
+
+    def __init__(self, sender, intended_room, message_text):
+        self.sender = sender
+        self.intended_room = intended_room
+        self.message_text = message_text
+
+    def __repr__(self):
+        return '<Message %r>' % self.message_text
+
 
 
 @app.route("/conversations", methods=["GET"])
@@ -102,6 +125,13 @@ def message_handler(msg):
     :param msg: Dictonary containing the message contebts and intended roon
     """
     logging.info("Message Text: %s" %  msg['msg'])
+    
+    message_entry = Message(request.sid, msg['room'], msg['msg'])
+    if msg['msg'] != "User has connected!":
+        print("About to add to DB")
+        db.session.add(message_entry)
+        db.session.commit()
+        print("Added to DB")
     send(msg['msg'], room=msg['room'])
 
 
@@ -143,6 +173,8 @@ if __name__ == "__main__":
     #host_ip = str(get_ip())
     # Uses HTTP on ip
     host_ip = "127.0.0.1"
+    db.create_all()
+
     #app.run(host=host_ip, threaded=True)
     socketio.run(app, host=host_ip)
     # Uses HTTPS
