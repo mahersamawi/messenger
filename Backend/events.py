@@ -4,15 +4,14 @@ from app import *
 from models import Message
 
 
-
 @socketio.on("message")
 def message_handler(msg):
     """
     Message hangler that whenever a message is received it is sent to the proper room. 
     :param msg: Dictonary containing the message contebts and intended roon
     """
-    logging.info("Message Text: %s" %  msg['msg'])
-    
+    logging.info("Message Text: %s" % msg['msg'])
+
     message_entry = Message(request.sid, msg['room'], msg['msg'])
     if msg['msg'] != "User has connected!":
         print("About to add to DB")
