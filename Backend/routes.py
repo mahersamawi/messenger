@@ -6,7 +6,7 @@ import logging
 import time
 from flask import Flask, request, jsonify, make_response, Blueprint
 from flask_sqlalchemy import SQLAlchemy
-from models import *
+from models import db, Message
 
 message_bp = Blueprint('message', __name__)
 

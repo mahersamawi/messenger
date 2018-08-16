@@ -1,8 +1,7 @@
 import logging
 from flask_socketio import SocketIO, send, join_room, leave_room
 from flask import Flask, request, jsonify, make_response
-from routes import message_bp
-from models import db
+from routes import message_bp, db
 
 LOG_TO_FILE = False
 LEVEL = logging.INFO
