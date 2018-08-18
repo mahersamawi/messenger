@@ -2,8 +2,8 @@ import logging
 from flask_socketio import SocketIO, send, join_room, leave_room
 from flask import Flask, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
-from app import db, socketio
-from models import Message
+from app import socketio
+from models import Message, db
 
 
 @socketio.on("message")
