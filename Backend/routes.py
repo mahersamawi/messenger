@@ -8,6 +8,7 @@ from flask import Flask, request, jsonify, make_response, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from models import db, Message
 
+# Routes Blueprint
 message_bp = Blueprint('message', __name__)
 
 

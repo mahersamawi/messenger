@@ -4,13 +4,16 @@ from flask import Flask, request, jsonify, make_response
 from routes import message_bp, db
 
 LOG_TO_FILE = False
-LEVEL = logging.INFO
+LEVEL = logging.DEBUG
 if LOG_TO_FILE:
     logging.basicConfig(filename='logger.log', filemode='w',
                         format='%(levelname)s:%(message)s', level=LEVEL)
 else:
     logging.basicConfig(format='%(levelname)s:%(message)s', level=LEVEL)
 
+"""
+Setting up Flask configurations and Database
+"""
 app = Flask(__name__)
 socketio = SocketIO(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'

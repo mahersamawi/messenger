@@ -15,9 +15,9 @@ def get_ip():
 
 
 if __name__ == "__main__":
-    #host_ip = str(get_ip())
+    host_ip = str(get_ip())
     # Uses HTTP on ip
-    host_ip = "127.0.0.1"
+    #host_ip = "127.0.0.1"
     #app.run(host=host_ip, threaded=True)
     socketio.run(app, host=host_ip)
     # Uses HTTPS
