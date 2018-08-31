@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import io from 'socket.io-client';
-import * as ReactBootstrap from 'react-bootstrap';
+import { Container, Row, Col } from 'reactstrap';
 
 var ip = "192.168.1.2";
 var socket = io('http://' + ip + ':5000');
@@ -16,9 +16,8 @@ class App extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
   }
-
+  
   componentDidMount(){
       socket.on('connect', function() {
       var send_dict = {};
@@ -36,37 +35,32 @@ class App extends Component {
     send_dict['room'] = this.state.room;
     socket.send(send_dict);
     this.setState(
-      {
-        text: ""
-      }
-    );
+    {
+      text: ""
+    });
   }
 
   handleChange(event) {
     console.log("here");
     this.setState(
-      {
+    {
         text: event.target.value
-      }
-    );
+    });
   }
 
   render() {
     return (
-    <ReactBootstrap.Grid>
-    <ReactBootstrap.Row className="show-grid">
-      <ReactBootstrap.Col lg={2}>
-        <p>
-          hendrerit 1
-        </p>
-      </ReactBootstrap.Col>
-      <ReactBootstrap.Col lg={2}>
-        <p>
-          hendrerit 2
-        </p>
-      </ReactBootstrap.Col>
-    </ReactBootstrap.Row>
-  </ReactBootstrap.Grid>
+      <Container className="top">
+        <Col className="Rooms">
+          <p> room </p>
+        </Col>
+        <Col className="Text">
+          <p> text </p>
+        </Col>
+        <Col className="Members">
+          <p> members </p>
+        </Col>
+      </Container>
     );
   }
 }
