@@ -5,24 +5,47 @@ import urllib.request
 import logging
 import time
 from flask import Flask, request, jsonify, make_response, Blueprint
-from flask_sqlalchemy import SQLAlchemy
 from models import db, Message
+from flask_sqlalchemy import SQLAlchemy 
+
 
 # Routes Blueprint
 message_bp = Blueprint('message', __name__)
 
 
-@message_bp.route("/conversations", methods=["GET"])
-def get_conversations():
+
+@message_bp.route("/room_messages", methods=["GET"])
+def get_room_text():
     """
     Return a users associated conversations 
-    Should be continuously be polled to get the the most recent messages
+    TODO add which room as parameter in request
     """
-    user_token = get_parameter(request, "access_token")
-    if user_token is None:
-        return make_response(jsonify("Access Token Needed"), 404)
+    # TODO Add access token to each user so they can access their groups
+    # user_token = get_parameter(request, "access_token")
+    # if user_token is None:
+    #     return make_response(jsonify("Access Token Needed"), 404)
+    response = {}
+    response['messsages'] = []
+    s = db.session.query(Message.message_text).filter(Message.intended_room == "poop")
+    for txt in s:
+        print(txt)
+        response['messsages'].append(txt[0])
+    return make_response(jsonify(response), 200)
+
+
+
+@message_bp.route("/rooms", methods=["GET"])
+def get_conversations():
+    """
+    Return a users associated rooms  
+    """
+    # TODO Add access token to each user so they can access their groups
+    # user_token = get_parameter(request, "access_token")
+    # if user_token is None:
+    #     return make_response(jsonify("Access Token Needed"), 404)
 
     # Get the user conversations from the database
+
 
 
 @message_bp.route("/profile", methods=["GET"])
@@ -72,6 +95,15 @@ def send_message():
     # Update database with the information
 
     return make_response((jsonify("Message sent!")))
+
+
+def run(stmt):
+    """
+    TODO Comments
+    """
+    rs = stmt.execute()
+    for row in rs:
+        logging.info(row)
 
 
 def get_parameter(url_to_parse, parameter_to_get):

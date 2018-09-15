@@ -14,12 +14,12 @@ def message_handler(msg):
     """
     logging.info("Message Text: %s" % msg['msg'])
 
-    message_entry = Message(request.sid, msg['room'], msg['msg'])
+    message_entry = Message(request.sid, msg['room'], msg['msg'], msg['time'])
     if msg['msg'] != "User has connected!":
-        print("About to add to DB")
+        logging.info("About to add to DB")
         db.session.add(message_entry)
         db.session.commit()
-        print("Added to DB")
+        logging.info("Added to DB")
     send(msg['msg'], room=msg['room'])
 
 
