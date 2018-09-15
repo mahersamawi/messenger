@@ -23,19 +23,26 @@ class App extends Component {
 
   addToList(msg){
     console.log("Before state");
-    var arr = this.state.old_messages.push(msg);
-    console.log("Settng state");
-    this.setState({old_messages: arr});
+    console.log(this.state.old_messages);
+    if (Array.isArray(this.state.old_messages) === true){
+      var arr = this.state.old_messages;
+      arr.push(msg);
+      console.log("Settng state");
+      this.setState({old_messages: arr});
+    }
   }
 
 
   makeList(list){
-    const listItems = list.map((list) =>
-      <li>{list}</li>
-    );
-    return (
-      <ul>{listItems}</ul>
-    );
+    console.log(Array.isArray(list));
+    if (Array.isArray(list) === true){
+      var listItems = list.map((list) =>
+        <li>{list}</li>
+      );
+      return (
+        <ul>{listItems}</ul>
+      );
+    }
   }
 
 
@@ -48,11 +55,13 @@ class App extends Component {
       socket.send(send_dict);
     });
     // just for testing 
+    var test = this;
     socket.emit("join", 'poop'); 
     socket.on('message', function(msg) {
       console.log('Received message');
       console.log(msg);
-      console.log(this);
+      console.log(test);
+      test.addToList(msg);
     });
     let url = "http://192.168.1.2:5000/room_messages";
     
