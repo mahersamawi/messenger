@@ -2,42 +2,43 @@
 .Rooms{
   position: relative;
   background-color: red;
-  height:100%;
-  width:33.3%;
-  float:left;
+  height: 100%;
+  width: 33.3%;
+  float: left;
 }
 
 .Members{
   position: relative;
   background-color: yellow;
-  height:100%;
-  width:33.3%;
-  float:left;
+  height: 100%;
+  width: 33.3%;
+  float: left;
 
 }
+
 .Text{
   position: relative;
   background-color: blue;
-  height:100%;
-  width:33.3%;
-  float:left;
+  height: 100%;
+  width: 33.3%;
+  float: left;
 }
 
 .top {
-  height:100%; 
+  height: 100%; 
 }
 
 html, body{ 
-  margin:0; 
-  padding:0; 
-  height:100%; 
+  margin: 0; 
+  padding: 0; 
+  height: 100%; 
   background-color: white;
 }
 
 .root { 
-  margin:0; 
-  padding:0; 
-  height:100%; 
+  margin: 0; 
+  padding: 0; 
+  height: 100%; 
   background-color: white;
 }
 
